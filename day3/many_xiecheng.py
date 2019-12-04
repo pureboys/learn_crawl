@@ -1,21 +1,27 @@
-# 协程
+# 多任务异步协程
 import asyncio
+import time
+from time import sleep
+
+urls = ['www.baidu.com', 'www.sogou.com', 'www.goubanjia.com']
 
 
 async def request(url):
     print("正在请求:", url)
+    # 在多任务异步协程实现中，不可以出现不支持异步的相关代码
+    # sleep(2)
+    await asyncio.sleep(2)
     print("下载成功:", url)
 
 
-c = request('www.baidu.com')
-
-# 实例化一个事件循环对象
+start = time.time()
+# 任务列表: 放置多个任务对象
+tasks = []
 loop = asyncio.get_event_loop()
-# 创建一个任务对象 将协程对象封装到了任务对象中
-# task = loop.create_task(c)
+for url in urls:
+    c = request(urls)
+    task = asyncio.ensure_future(c)
+    tasks.append(task)
 
-# 另一种形式实例化任务对象的方法
-task = asyncio.ensure_future(c)
-
-# 将协程对象注册到事件循环对象中，并且我们需要启动事件循环对象
-loop.run_until_complete(task)
+loop.run_until_complete(asyncio.wait(tasks))
+print(time.time() - start)
