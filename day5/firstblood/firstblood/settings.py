@@ -65,8 +65,10 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    # 数字是优先级
-   'firstblood.pipelines.FirstbloodPipeline': 300,
+    # 数字是优先级, 越小优先执行
+   # 'firstblood.pipelines.FirstbloodPipeline': 200,
+   # 'firstblood.pipelines.MysqlPipeline': 201,
+   'firstblood.pipelines.RedisPipeline': 202,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -89,3 +91,6 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# 日志类型 INFO DEBUG ERROR
+LOG_LEVEL = 'ERROR'
