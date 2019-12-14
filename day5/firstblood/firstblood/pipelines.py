@@ -66,3 +66,10 @@ class RedisPipeline(object):
         }
         self.conn.lpush('quote', dic)  # redis-py使用2.10.6
         return item
+
+
+class PrintPipeline(object):
+
+    def process_item(self, item, spider):
+        print(item)
+        return item

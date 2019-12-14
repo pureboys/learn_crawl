@@ -7,6 +7,8 @@ class FirstSpider(scrapy.Spider):
     name = 'first'
     # allowed_domains = ['example.com']
     start_urls = ['http://quotes.toscrape.com/page/1/']
+    url = 'http://quotes.toscrape.com/page/%d'
+    page = 1
 
     # 基于终端指令的
     # def parse(self, response):
@@ -36,4 +38,8 @@ class FirstSpider(scrapy.Spider):
             item['content'] = content
             # 将item提交给管道
             yield item
-
+        if self.page <= 5:
+            print(self.page)
+            new_url = format(self.url % self.page)
+            yield scrapy.Request(url=new_url, callback=self.parse)
+        self.page += 1

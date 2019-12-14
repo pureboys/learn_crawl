@@ -68,7 +68,8 @@ ITEM_PIPELINES = {
     # 数字是优先级, 越小优先执行
    # 'firstblood.pipelines.FirstbloodPipeline': 200,
    # 'firstblood.pipelines.MysqlPipeline': 201,
-   'firstblood.pipelines.RedisPipeline': 202,
+   # 'firstblood.pipelines.RedisPipeline': 202,
+   'firstblood.pipelines.PrintPipeline': 203,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
