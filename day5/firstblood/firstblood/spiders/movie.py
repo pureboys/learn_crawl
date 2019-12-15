@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from firstblood.items import MovieItem
+from redis import Redis
 
 
 class PostDevSpider(scrapy.Spider):
@@ -10,6 +11,7 @@ class PostDevSpider(scrapy.Spider):
     # 非第一页的通用模板
     url = 'https://www.4567tv.tv/frim/index1-%d.html'
     page = 2
+    conn = Redis(host='127.0.0.1', port=6379)
 
     # 基于管道的
     def parse(self, response):
@@ -21,8 +23,12 @@ class PostDevSpider(scrapy.Spider):
             item = MovieItem()
             item['name'] = name
 
-            # 对详情页url发起get请求
-            yield scrapy.Request(url=detail_url, callback=self.detail_parse, meta={'item': item})
+            ex = self.conn.sadd('movie_detail_urls', detail_url)
+            if ex == 1:
+                # 对详情页url发起get请求
+                yield scrapy.Request(url=detail_url, callback=self.detail_parse, meta={'item': item})
+            else:
+                pass
 
         if self.page <= 5:
             new_url = format(self.url % self.page)
